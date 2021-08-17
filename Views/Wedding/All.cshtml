@@ -1,0 +1,53 @@
+@*
+  @model lowercase m to specify the data type of the view model
+  @Model capital m to access the data
+*@
+
+@model List<Wedding>
+
+<h2 class="text-center">All Weddings</h2>
+
+@{
+  Wedding emptyWedding = new Wedding();
+}
+@* <partial name="_NewWedding" model="@emptyWedding"></partial>
+<partial name="_NewPost" model="@new Post()"></partial> *@
+
+@foreach (Wedding wedding in Model)
+{
+  bool alreadyRSVPd = wedding.RSVPs.Any(like => Context.Session.GetInt32("UserId") == like.UserId);
+
+  <div class="card shadow rounded mx-auto w-75 mb-3">
+    <h4 class="card-title text-center bg-dark text-light py-2 rounded-top">
+
+      @*
+        asp-route-paramName where paramName matches exactly the param name from
+        the controller action (method).
+      *@
+      <a asp-controller="Wedding" asp-action="Details" asp-route-weddingId="@wedding.WeddingId">@wedding.WedderOne + @wedding.WedderTwo's Wedding</a>
+    </h4>
+
+    <div class="card-body">
+      <p class="card-text">@wedding.Date</p>
+      <small class="text-muted">
+        Submitted on: @wedding.CreatedAt by <a asp-controller="Home" asp-action="Details" asp-route-userId="@wedding.UserId">
+          @wedding.CreatedBy.FullName()
+        </a>
+      </small>
+      <form asp-controller="Wedding" asp-action="RSVP" asp-route-weddingId="@wedding.WeddingId">
+        <button class="btn btn-link">
+          @if (alreadyRSVPd)
+          {
+            @* Thumbs up icon. *@
+            <span>Un-RSVP</span>
+          }
+          else
+          {
+            <span>RSVP</span>
+          }
+          <span>(@wedding.RSVPs.Count)</span>
+        </button>
+      </form>
+    </div>
+  </div>
+}

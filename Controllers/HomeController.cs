@@ -43,7 +43,7 @@ namespace WeddingPlanner.Controllers
         {
             if (isLoggedIn)
             {
-                return RedirectToAction("All", "Posts");
+                return RedirectToAction("All", "Wedding");
             }
 
             return View("Index");
@@ -81,7 +81,7 @@ namespace WeddingPlanner.Controllers
 
             HttpContext.Session.SetInt32("UserId", newUser.UserId);
             HttpContext.Session.SetString("FirstName", newUser.FirstName);
-            return RedirectToAction("All", "Posts");
+            return RedirectToAction("All", "Weddings");
         }
 
         [HttpPost("/login")]
@@ -118,7 +118,7 @@ namespace WeddingPlanner.Controllers
 
             HttpContext.Session.SetInt32("UserId", dbUser.UserId);
             HttpContext.Session.SetString("FirstName", dbUser.FirstName);
-            return RedirectToAction("All", "Posts");
+            return RedirectToAction("All", "Weddings");
         }
 
         [HttpPost("/logout")]

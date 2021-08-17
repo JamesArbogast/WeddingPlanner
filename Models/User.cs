@@ -36,5 +36,10 @@ namespace WeddingPlanner.Models
 
         public List<Wedding> Weddings { get; set; }
         public List <UserWeddingRSVP> RSVPs { get; set; }
+
+        public string FullName()
+        {
+          return FirstName + " " + LastName;
+        }
       }
   }

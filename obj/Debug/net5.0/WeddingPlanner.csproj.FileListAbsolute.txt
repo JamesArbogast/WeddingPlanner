@@ -47,3 +47,9 @@ C:\Users\james\OneDrive\Desktop\coding_dojo\CSharp\WeddingPlanner\obj\Debug\net5
 C:\Users\james\OneDrive\Desktop\coding_dojo\CSharp\WeddingPlanner\obj\Debug\net5.0\ref\WeddingPlanner.dll
 C:\Users\james\OneDrive\Desktop\coding_dojo\CSharp\WeddingPlanner\obj\Debug\net5.0\WeddingPlanner.pdb
 C:\Users\james\OneDrive\Desktop\coding_dojo\CSharp\WeddingPlanner\obj\Debug\net5.0\WeddingPlanner.genruntimeconfig.cache
+C:\Users\james\OneDrive\Desktop\coding_dojo\CSharp\WeddingPlanner\obj\Debug\net5.0\Razor\Views\Home\_Login.cshtml.g.cs
+C:\Users\james\OneDrive\Desktop\coding_dojo\CSharp\WeddingPlanner\obj\Debug\net5.0\Razor\Views\Home\_Register.cshtml.g.cs
+C:\Users\james\OneDrive\Desktop\coding_dojo\CSharp\WeddingPlanner\obj\Debug\net5.0\Razor\Views\Wedding\All.cshtml.g.cs
+C:\Users\james\OneDrive\Desktop\coding_dojo\CSharp\WeddingPlanner\obj\Debug\net5.0\Razor\Views\Wedding\New.cshtml.g.cs
+C:\Users\james\OneDrive\Desktop\coding_dojo\CSharp\WeddingPlanner\obj\Debug\net5.0\Razor\Views\Wedding\_NewWedding.cshtml.g.cs
+C:\Users\james\OneDrive\Desktop\coding_dojo\CSharp\WeddingPlanner\obj\Debug\net5.0\Razor\Views\Wedding\Details.cshtml.g.cs

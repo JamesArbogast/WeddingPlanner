@@ -178,29 +178,29 @@ namespace WeddingPlanner.Controllers
         }
 
         [HttpPost("/weddings/{weddingId}/rsvp")]
-        public IActionResult Like(int weddingId)
+        public IActionResult RSVP(int weddingId)
         {
             if (!isLoggedIn)
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            UserWeddingRSVP existingLike = db.RSVPs
+            UserWeddingRSVP existingRSVP = db.RSVPs
                 .FirstOrDefault(rsvp => rsvp.UserId == (int)uid && rsvp.WeddingId == weddingId);
 
-            if (existingLike == null)
+            if (existingRSVP == null)
             {
-                UserWeddingRSVP like = new UserWeddingRSVP()
+                UserWeddingRSVP rsvp = new UserWeddingRSVP()
                 {
                     WeddingId = weddingId,
                     UserId = (int)uid
                 };
 
-                db.RSVPs.Add(like);
+                db.RSVPs.Add(rsvp);
             }
             else
             {
-                db.RSVPs.Remove(existingLike);
+                db.RSVPs.Remove(existingRSVP);
             }
 
 

@@ -17,6 +17,7 @@ namespace WeddingPlanner.Models
     public string WedderTwo { get; set; }
     [Required]
     [DataType(DataType.Date)]
+    // [Range(typeof(DateTime), DateTime.Now.ToString(), "")]
     public DateTime Date {get; set; }
     [Required]
     [MinLength(5, ErrorMessage = "must be at least 5 characters.")]

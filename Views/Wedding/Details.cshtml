@@ -1,0 +1,44 @@
+@model Wedding
+
+@* @{
+  int? uid = Context.Session.GetInt32("UserId");
+  } *@
+
+<div class="card shadow rounded mx-auto mb-3">
+  <h4 class="card-title text-center bg-dark text-light py-2 rounded-top">
+    @Model.WedderOne + @Model.WedderTwo's Wedding
+  </h4>
+
+  <div class="card-body">
+    <p class="card-text">@Model.Date</p>
+    <small class="text-muted">Submitted on: @Model.CreatedAt by @Model.CreatedBy.FullName()</small>
+  </div>
+
+  @* Hide edit & delete if not the author *@
+  @if (Model.UserId == Context.Session.GetInt32("UserId"))
+  {
+    <div class="row justify-content-center p-3">
+
+      <form asp-controller="Wedding" asp-action="Delete" asp-route-weddingId="@Model.WeddingId" method="POST">
+        <button class="btn btn-outline-danger btn-sm">Delete</button>
+      </form>
+
+      <a asp-controller="Wedding" asp-action="Edit" asp-route-weddingId="@Model.WeddingId"
+      class="btn btn-sm btn-outline-warning ml-2">
+        Edit
+      </a>
+    </div>
+  }
+
+  <div>
+    <h3 class="">RSVPs</h3>
+    @* @foreach (UserWeddingRSVP rsvp in Model.RSVPs)
+    {
+      @* Doing it manually will leave a trailing ", " at the end. *@
+      @* <span>@rsvp.User.FullName(), </span>
+    }*@
+    <span>
+      @String.Join(", ", Model.RSVPs.Select(rsvp => rsvp.User.FullName()))
+    </span>
+  </div>
+</div>
