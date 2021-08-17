@@ -34,7 +34,7 @@ namespace WeddingPlanner.Controllers
         }
 
         // 1. handles GET request to DISPLAY the form used to create a new Post
-        [HttpGet("/posts/new")]
+        [HttpGet("/weddings/new")]
         public IActionResult New()
         {
             if (!isLoggedIn)
@@ -46,7 +46,7 @@ namespace WeddingPlanner.Controllers
         }
 
         // 2. handles POST request form submission to CREATE a new Post model instance
-        [HttpPost("/posts/create")]
+        [HttpPost("/weddings/create")]
         public IActionResult Create(Wedding newWedding)
         {
             // Every time a form is submitted, check the validations.
@@ -59,14 +59,14 @@ namespace WeddingPlanner.Controllers
             newWedding.UserId = (int)uid; // Relate the author to the post.
 
             // The above return did not happen so ModelState IS valid.
-            db.Weddings.Add(newPost);
+            db.Weddings.Add(newWedding);
             // db doesn't update until we run save changes
             // after SaveChanges, our newPost object now has it's PostId updated from db auto generated id
             db.SaveChanges();
             return RedirectToAction("All");
         }
 
-        [HttpGet("/posts")]
+        [HttpGet("/weddings")]
         public IActionResult All()
         {
             if (!isLoggedIn)
@@ -74,12 +74,12 @@ namespace WeddingPlanner.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            List<Wedding> allWedding = db.Weddings
+            List<Wedding> allWeddings = db.Weddings
                 // Select what navigation properties from a Post you want to be included (JOIN).
-                .Include(post => post.Author) // hover over the param to see it's data type
-                .Include(post => post.Likes)
+                .Include(post => post.CreatedBy) // hover over the param to see it's data type
+                .Include(post => post.RSVPs)
                 .ToList();
-            return View("All", allPosts);
+            return View("All", allWeddings);
 
             /* 
             The db.Posts and the .Include did this:
@@ -88,85 +88,85 @@ namespace WeddingPlanner.Controllers
             */
         }
 
-        [HttpGet("/posts/{postId}")]
-        public IActionResult Details(int postId)
+        [HttpGet("/weddings/{weddingId}")]
+        public IActionResult Details(int weddingId)
         {
             if (!isLoggedIn)
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            Post post = db.Posts
-                .Include(post => post.Author)
-                .Include(post => post.Likes)
+            Wedding wedding = db.Weddings
+                .Include(post => post.CreatedBy)
+                .Include(post => post.RSVPs)
                 // Include something from the last thing that was included.
                 // Include the User from the likes (hover over like param to see data type)
-                .ThenInclude(like => like.User)
-                .FirstOrDefault(p => p.PostId == postId);
+                .ThenInclude(rsvp => rsvp.User)
+                .FirstOrDefault(w => w.WeddingId == weddingId);
 
-            if (post == null)
+            if (wedding == null)
             {
                 return RedirectToAction("All");
             }
 
-            return View("Details", post);
+            return View("Details", wedding);
         }
 
-        [HttpPost("/posts/{postId}/delete")]
-        public IActionResult Delete(int postId)
+        [HttpPost("/weddings/{weddingId}/delete")]
+        public IActionResult Delete(int weddingId)
         {
-            Post post = db.Posts.FirstOrDefault(p => p.PostId == postId);
+            Wedding wedding = db.Weddings.FirstOrDefault(w => w.WeddingId == weddingId);
 
-            if (post == null)
+            if (wedding == null)
             {
-                return RedirectToAction("All");
+              return RedirectToAction("All");
             }
 
-            db.Posts.Remove(post);
+            db.Weddings.Remove(wedding);
             db.SaveChanges();
             return RedirectToAction("All");
         }
 
-        [HttpGet("/posts/{postId}/edit")]
-        public IActionResult Edit(int postId)
+        [HttpGet("/weddings/{weddingId}/edit")]
+        public IActionResult Edit(int weddingId)
         {
-            Post post = db.Posts.FirstOrDefault(p => p.PostId == postId);
+            Wedding wedding = db.Weddings.FirstOrDefault(w => w.WeddingId == weddingId);
 
             // The edit button will be hidden if you are not the author,
             // but the user could still type the URL in manually, so
             // prevent them from editing if they are not the author.
-            if (post == null || post.UserId != uid)
+            if (wedding == null || wedding.UserId != uid)
             {
                 return RedirectToAction("All");
             }
 
-            return View("Edit", post);
+            return View("Edit", wedding);
         }
 
-        [HttpPost("/posts/{postId}/update")]
-        public IActionResult Update(int postId, Post editedPost)
+        [HttpPost("/weddings/{weddingId}/update")]
+        public IActionResult Update(int weddingId, Wedding editedWedding)
         {
             if (ModelState.IsValid == false)
             {
-                editedPost.PostId = postId;
+                editedWedding.WeddingId = weddingId;
                 // Send back to the page with the current form edited data to
                 // display errors.
-                return View("Edit", editedPost);
+                return View("Edit", editedWedding);
             }
 
-            Post dbPost = db.Posts.FirstOrDefault(p => p.PostId == postId);
+            Wedding dbWedding = db.Weddings.FirstOrDefault(w => w.WeddingId == weddingId);
 
-            if (dbPost == null)
+            if (dbWedding == null)
             {
                 return RedirectToAction("All");
             }
 
-            dbPost.Topic = editedPost.Topic;
-            dbPost.Body = editedPost.Body;
-            dbPost.ImgUrl = editedPost.ImgUrl;
-            dbPost.UpdatedAt = DateTime.Now;
+            dbWedding.WedderOne = editedWedding.WedderOne;
+            dbWedding.WedderTwo = editedWedding.WedderTwo;
+            dbWedding.Address = editedWedding.Address;
+            dbWedding.UpdatedAt = DateTime.Now;
 
-            db.Posts.Update(dbPost);
+            db.Weddings.Update(dbWedding);
             db.SaveChanges();
 
             /* 
@@ -174,33 +174,33 @@ namespace WeddingPlanner.Controllers
             dict with keys that match param names and the value of the keys are
             the values for the params.
             */
-            return RedirectToAction("Details", new { postId = postId });
+            return RedirectToAction("Details", new { weddingId = weddingId });
         }
 
-        [HttpPost("/posts/{postId}/like")]
-        public IActionResult Like(int postId)
+        [HttpPost("/weddings/{weddingId}/rsvp")]
+        public IActionResult Like(int weddingId)
         {
             if (!isLoggedIn)
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            UserPostLike existingLike = db.UserPostLikes
-                .FirstOrDefault(like => like.UserId == (int)uid && like.PostId == postId);
+            UserWeddingRSVP existingLike = db.RSVPs
+                .FirstOrDefault(rsvp => rsvp.UserId == (int)uid && rsvp.WeddingId == weddingId);
 
             if (existingLike == null)
             {
-                UserPostLike like = new UserPostLike()
+                UserWeddingRSVP like = new UserWeddingRSVP()
                 {
-                    PostId = postId,
+                    WeddingId = weddingId,
                     UserId = (int)uid
                 };
 
-                db.UserPostLikes.Add(like);
+                db.RSVPs.Add(like);
             }
             else
             {
-                db.UserPostLikes.Remove(existingLike);
+                db.RSVPs.Remove(existingLike);
             }
 
 

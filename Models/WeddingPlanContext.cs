@@ -12,7 +12,5 @@ namespace WeddingPlanner.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Wedding> Weddings { get; set; }
         public DbSet<UserWeddingRSVP> RSVPs { get; set; }
-        // public DbSet<Widget> Widgets { get; set; }
-        // public DbSet<Item> Items { get; set; }
     }
 }
