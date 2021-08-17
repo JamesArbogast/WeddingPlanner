@@ -48,18 +48,17 @@ namespace WeddingPlanner
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+        
+            // css, js, and image files can now be added to wwwroot folder
             app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
+            app.UseSession();
+            app.UseMvc(routes =>
             {
-                endpoints.MapControllerRoute(
+                routes.MapRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }
