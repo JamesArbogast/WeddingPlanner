@@ -6,6 +6,9 @@
 @model List<Wedding>
 
 <h2 class="text-center">All Weddings</h2>
+<div class="text-center">
+  <button class="btn btn-success m-2" href="/weddings">New Wedding</button>
+</div>
 
 @{
   Wedding emptyWedding = new Wedding();
@@ -34,19 +37,17 @@
           @wedding.CreatedBy.FullName()
         </a>
       </small>
-      <form asp-controller="Wedding" asp-action="RSVP" asp-route-weddingId="@wedding.WeddingId">
-        <button class="btn btn-link">
+      <form asp-controller="Wedding" asp-action="RSVP" asp-route-weddingId="@wedding.WeddingId" class="float-start">
           @if (alreadyRSVPd)
           {
             @* Thumbs up icon. *@
-            <span>Un-RSVP</span>
+            <button class="btn btn-outline-danger m-3">Un-RSVP</button>
           }
           else
           {
-            <span>RSVP</span>
+            <button class="btn btn-outline-success m-3">RSVP</button> 
           }
           <span>(@wedding.RSVPs.Count)</span>
-        </button>
       </form>
     </div>
   </div>
