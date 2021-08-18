@@ -56,6 +56,12 @@ namespace WeddingPlanner.Controllers
                 return View("New");
             }
 
+            if(newWedding.Date < DateTime.Now)
+            {
+              ModelState.AddModelError("Date","must be a future Date.");
+              return View("New");
+            }
+
             newWedding.UserId = (int)uid; // Relate the author to the post.
 
             // The above return did not happen so ModelState IS valid.
