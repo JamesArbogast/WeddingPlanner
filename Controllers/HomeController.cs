@@ -59,11 +59,6 @@ namespace WeddingPlanner.Controllers
                 {
                     ModelState.AddModelError("Email", "is taken.");
                 }
-                /* We could add more custom errors */
-                // if (newUser.FirstName == "Lawrence")
-                // {
-                //     ModelState.AddModelError("FirstName", "Sorry, no Lawrences allowed.");
-                // }
             }
 
             // If any above custom errors were added, ModelState would now be invalid.
@@ -81,7 +76,7 @@ namespace WeddingPlanner.Controllers
 
             HttpContext.Session.SetInt32("UserId", newUser.UserId);
             HttpContext.Session.SetString("FirstName", newUser.FirstName);
-            return RedirectToAction("All", "Weddings");
+            return RedirectToAction("All", "Wedding");
         }
 
         [HttpPost("/login")]
@@ -97,11 +92,6 @@ namespace WeddingPlanner.Controllers
 
             if (dbUser == null)
             {
-                /*
-                Usually you don't want to reveal specifics, like was the email
-                or password invalid because of phishing. But for testing it's
-                easier to see what actually went wrong with specific errors.
-                */
                 ModelState.AddModelError("LoginEmail", "Email not found.");
                 return View("Index");
             }
@@ -128,20 +118,20 @@ namespace WeddingPlanner.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet("/users/{userId}")]
-        public IActionResult Details(int userId)
-        {
-            User user = db.Users
-                .Include(user => user.Weddings)
-                .FirstOrDefault(u => u.UserId == userId);
+        // [HttpGet("/users/{userId}")]
+        // public IActionResult Details(int userId)
+        // {
+        //     User user = db.Users
+        //         .Include(user => user.Weddings)
+        //         .FirstOrDefault(u => u.UserId == userId);
 
-            if (user == null)
-            {
-                return RedirectToAction("All", "Posts");
-            }
+        //     if (user == null)
+        //     {
+        //         return RedirectToAction("All", "Wedding");
+        //     }
 
-            return View("Details", user);
-        }
+        //     return View("Details", user);
+        // }
 
         public IActionResult Privacy()
         {

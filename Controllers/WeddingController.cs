@@ -58,8 +58,8 @@ namespace WeddingPlanner.Controllers
 
             if(newWedding.Date < DateTime.Now)
             {
-              ModelState.AddModelError("Date","must be a future Date.");
-              return View("New");
+                ModelState.AddModelError("Date","must be a future Date.");
+                return View("New");
             }
 
             newWedding.UserId = (int)uid; // Relate the author to the post.
@@ -86,12 +86,6 @@ namespace WeddingPlanner.Controllers
                 .Include(post => post.RSVPs)
                 .ToList();
             return View("All", allWeddings);
-
-            /* 
-            The db.Posts and the .Include did this:
-            SELECT * FROM posts AS p
-            JOIN users AS u ON u.UserId = p.UserId
-            */
         }
 
         [HttpGet("/weddings/{weddingId}")]
@@ -125,7 +119,7 @@ namespace WeddingPlanner.Controllers
 
             if (wedding == null)
             {
-              return RedirectToAction("All");
+                return RedirectToAction("All");
             }
 
             db.Weddings.Remove(wedding);
@@ -133,55 +127,55 @@ namespace WeddingPlanner.Controllers
             return RedirectToAction("All");
         }
 
-        [HttpGet("/weddings/{weddingId}/edit")]
-        public IActionResult Edit(int weddingId)
-        {
-            Wedding wedding = db.Weddings.FirstOrDefault(w => w.WeddingId == weddingId);
+        // [HttpGet("/weddings/{weddingId}/edit")]
+        // public IActionResult Edit(int weddingId)
+        // {
+        //     Wedding wedding = db.Weddings.FirstOrDefault(w => w.WeddingId == weddingId);
 
-            // The edit button will be hidden if you are not the author,
-            // but the user could still type the URL in manually, so
-            // prevent them from editing if they are not the author.
-            if (wedding == null || wedding.UserId != uid)
-            {
-                return RedirectToAction("All");
-            }
+        //     // The edit button will be hidden if you are not the author,
+        //     // but the user could still type the URL in manually, so
+        //     // prevent them from editing if they are not the author.
+        //     if (wedding == null || wedding.UserId != uid)
+        //     {
+        //         return RedirectToAction("All");
+        //     }
 
-            return View("Edit", wedding);
-        }
+        //     return View("Edit", wedding);
+        // }
 
-        [HttpPost("/weddings/{weddingId}/update")]
-        public IActionResult Update(int weddingId, Wedding editedWedding)
-        {
-            if (ModelState.IsValid == false)
-            {
-                editedWedding.WeddingId = weddingId;
-                // Send back to the page with the current form edited data to
-                // display errors.
-                return View("Edit", editedWedding);
-            }
+        // [HttpPost("/weddings/{weddingId}/update")]
+        // public IActionResult Update(int weddingId, Wedding editedWedding)
+        // {
+        //     if (ModelState.IsValid == false)
+        //     {
+        //         editedWedding.WeddingId = weddingId;
+        //         // Send back to the page with the current form edited data to
+        //         // display errors.
+        //         return View("Edit", editedWedding);
+        //     }
 
-            Wedding dbWedding = db.Weddings.FirstOrDefault(w => w.WeddingId == weddingId);
+        //     Wedding dbWedding = db.Weddings.FirstOrDefault(w => w.WeddingId == weddingId);
 
-            if (dbWedding == null)
-            {
-                return RedirectToAction("All");
-            }
+        //     if (dbWedding == null)
+        //     {
+        //         return RedirectToAction("All");
+        //     }
 
-            dbWedding.WedderOne = editedWedding.WedderOne;
-            dbWedding.WedderTwo = editedWedding.WedderTwo;
-            dbWedding.Address = editedWedding.Address;
-            dbWedding.UpdatedAt = DateTime.Now;
+        //     dbWedding.WedderOne = editedWedding.WedderOne;
+        //     dbWedding.WedderTwo = editedWedding.WedderTwo;
+        //     dbWedding.Address = editedWedding.Address;
+        //     dbWedding.UpdatedAt = DateTime.Now;
 
-            db.Weddings.Update(dbWedding);
-            db.SaveChanges();
+        //     db.Weddings.Update(dbWedding);
+        //     db.SaveChanges();
 
-            /* 
-            When redirecting to action that has params, you need to pass in a
-            dict with keys that match param names and the value of the keys are
-            the values for the params.
-            */
-            return RedirectToAction("Details", new { weddingId = weddingId });
-        }
+        //     /* 
+        //     When redirecting to action that has params, you need to pass in a
+        //     dict with keys that match param names and the value of the keys are
+        //     the values for the params.
+        //     */
+        //     return RedirectToAction("Details", new { weddingId = weddingId });
+        // }
 
         [HttpPost("/weddings/{weddingId}/rsvp")]
         public IActionResult RSVP(int weddingId)
